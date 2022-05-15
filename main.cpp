@@ -81,7 +81,7 @@ public:
 
     void showClue()
     {
-        cout << asteriskClue << endl;
+        cout << "\n" << asteriskClue << endl;
     }
 
     void askToGuess()
@@ -104,6 +104,14 @@ public:
         {
             //  Guessed correctly
             asteriskClue.replace(searchResultPos, 1, string(userAnswer));
+        }
+    }
+    void checkHasWon(){
+        int pos = asteriskClue.find_first_of("*");
+        if (pos == -1){
+            //  No asterisk remaining
+            outOfLoop = true;
+            hasWon = true;
         }
     }
 
@@ -134,8 +142,13 @@ int main()
         h.showClue();
         h.askToGuess();
         h.checkGuess();
+        h.checkHasWon();
         h.checkGameOver();
         if (h.outOfLoop == true)    break;
     }
-    return 0;
+    if (h.hasWon)   cout << "\n\n Yay!! You were saved."<<endl;
+    else    {
+        cout << "\n\nOops!!You got hanged."<< endl;
+        h.drawHangMan(7);
+    }return 0;
 }
