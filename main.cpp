@@ -1,11 +1,15 @@
 #include <iostream>
+#include <string>
 using namespace std;
 
 class Hangman
 {
-
 public:
-    void drawing(int position)
+    int position;
+    string guessAnswer;
+    char userAnswer;
+    string alreadyGuessed[26];
+    void drawHangMan(int position)
     {
         switch (position)
         {
@@ -57,12 +61,39 @@ public:
             cout << "_|______________" << endl;
         }
     }
+
+    int findLengthofAnswer()
+    {
+        return guessAnswer.length();
+    }
+    void showClue()
+    {
+        int len = findLengthofAnswer();
+        for (int i = 0; i<len; i++){
+            cout << "*";
+        }
+    }
+    void askToGuess(){
+        cout << "\nGuess alphabet : " ;
+        cin >> userAnswer;
+
+    }
+    Hangman(int hangmanLevel, string answer)
+    {
+        position = hangmanLevel;
+        guessAnswer = answer;
+    }
 };
+
 int main()
 {
-    Hangman hangMan;
-    for (int i= 1; i<=7 ; i++){
-        hangMan.drawing(i);
-    }
+    string answer = "monkey";
+    Hangman h = Hangman(1, answer);
+    // while (1){
+    //     h.drawHangMan(h.position);
+    // }
+    h.showClue();
+    h.askToGuess();
+    cout << "\n Your answer : " << h.userAnswer;
     return 0;
 }
