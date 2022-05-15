@@ -11,6 +11,8 @@ public:
     string userAnswer;
     string alreadyGuessed[26];
     string asteriskClue;
+    bool hasWon = false;
+    bool outOfLoop = false;
     void drawHangMan(int position)
     {
         switch (position)
@@ -89,20 +91,28 @@ public:
         userAnswer = userAnswer[0]; // Taking only first letter
     }
 
+    //  Check mechanism
     void checkGuess()
     {
         searchResultPos = guessAnswer.find_first_of(userAnswer);
         if (searchResultPos == -1)
-        {
-            //  Further Hanged
-            cout << "Milena" << endl;
-            position++;
+        {   
+            //  Guessed incorrectly
+            position++;     
         }
         else
         {
             //  Guessed correctly
             asteriskClue.replace(searchResultPos, 1, string(userAnswer));
-            cout << "Milyo" << endl;
+        }
+    }
+
+
+    void checkGameOver(){
+        if (position == 7){
+            //  Game Over or Hanged
+            cout << "Game Over"<<endl;
+            outOfLoop = true;
         }
     }
     // Constructor
@@ -124,8 +134,8 @@ int main()
         h.showClue();
         h.askToGuess();
         h.checkGuess();
+        h.checkGameOver();
+        if (h.outOfLoop == true)    break;
     }
-
-    cout << "\n Your answer : " << h.userAnswer;
     return 0;
 }
