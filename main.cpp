@@ -69,13 +69,16 @@ public:
         return guessAnswer.length();
     }
 
-    void showClue()
-    {
+    void makeAsteriskClue(){
         int len = findLengthofAnswer();
         for (int i = 0; i < len; i++)
         {
             asteriskClue += "*";
         }
+    }  
+
+    void showClue()
+    {
         cout << asteriskClue << endl;
     }
 
@@ -85,6 +88,7 @@ public:
         cin >> userAnswer;
         userAnswer = userAnswer[0]; // Taking only first letter
     }
+
     void checkGuess()
     {
         searchResultPos = guessAnswer.find_first_of(userAnswer);
@@ -92,6 +96,7 @@ public:
         {
             //  Further Hanged
             cout << "Milena" << endl;
+            position++;
         }
         else
         {
@@ -112,12 +117,15 @@ int main()
 {
     string answer = "monkey";
     Hangman h = Hangman(1, answer);
-    // while (1){
-    //     h.drawHangMan(h.position);
-    // }
-    h.showClue();
-    h.askToGuess();
-    h.checkGuess();
+    //  Make asterisk Clue
+    h.makeAsteriskClue();
+    while (1){
+        h.drawHangMan(h.position);
+        h.showClue();
+        h.askToGuess();
+        h.checkGuess();
+    }
+
     cout << "\n Your answer : " << h.userAnswer;
     return 0;
 }
