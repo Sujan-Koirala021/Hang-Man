@@ -5,10 +5,12 @@ using namespace std;
 class Hangman
 {
 public:
+    int searchResultPos;
     int position;
     string guessAnswer;
-    char userAnswer;
+    string userAnswer;
     string alreadyGuessed[26];
+    string asteriskClue;
     void drawHangMan(int position)
     {
         switch (position)
@@ -66,18 +68,39 @@ public:
     {
         return guessAnswer.length();
     }
+
     void showClue()
     {
         int len = findLengthofAnswer();
-        for (int i = 0; i<len; i++){
-            cout << "*";
+        for (int i = 0; i < len; i++)
+        {
+            asteriskClue += "*";
+        }
+        cout << asteriskClue << endl;
+    }
+
+    void askToGuess()
+    {
+        cout << "\nGuess alphabet : ";
+        cin >> userAnswer;
+        userAnswer = userAnswer[0]; // Taking only first letter
+    }
+    void checkGuess()
+    {
+        searchResultPos = guessAnswer.find_first_of(userAnswer);
+        if (searchResultPos == -1)
+        {
+            //  Further Hanged
+            cout << "Milena" << endl;
+        }
+        else
+        {
+            //  Guessed correctly
+            asteriskClue.replace(searchResultPos, 1, string(userAnswer));
+            cout << "Milyo" << endl;
         }
     }
-    void askToGuess(){
-        cout << "\nGuess alphabet : " ;
-        cin >> userAnswer;
-
-    }
+    // Constructor
     Hangman(int hangmanLevel, string answer)
     {
         position = hangmanLevel;
@@ -94,6 +117,7 @@ int main()
     // }
     h.showClue();
     h.askToGuess();
+    h.checkGuess();
     cout << "\n Your answer : " << h.userAnswer;
     return 0;
 }
