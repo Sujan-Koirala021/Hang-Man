@@ -14,6 +14,7 @@ public:
     string asteriskClue;
     bool hasWon = false;
     bool outOfLoop = false;
+
     void drawHangMan(int position)
     {
         switch (position)
@@ -72,17 +73,18 @@ public:
         return guessAnswer.length();
     }
 
-    void makeAsteriskClue(){
+    void makeAsteriskClue()
+    {
         int len = findLengthofAnswer();
         for (int i = 0; i < len; i++)
         {
             asteriskClue += "*";
         }
-    }  
+    }
 
     void showClue()
     {
-        cout << "\n" << asteriskClue <<"\n"<<"Guessed: ";
+        cout << "\n" << asteriskClue << "\n" << "Guessed: ";
         displayPreviousGuess();
     }
 
@@ -91,7 +93,7 @@ public:
         cout << "\nGuess alphabet : ";
         cin >> userAnswer;
         // Taking only first letter
-        userAnswer = userAnswer[0];  
+        userAnswer = userAnswer[0];
         guessList[guessIndex] = userAnswer;
         guessIndex += 1;
     }
@@ -101,39 +103,62 @@ public:
     {
         searchResultPos = guessAnswer.find_first_of(userAnswer);
         if (searchResultPos == -1)
-        {   
+        {
             //  Guessed incorrectly
-            position++;     
+            position++;
         }
         else
         {
             //  Guessed correctly
-            asteriskClue.replace(searchResultPos, 1, string(userAnswer));
+            asteriskClue.replace(searchResultPos, 1, userAnswer);
+            guessAnswer.replace(searchResultPos, 1, "*");
+            isThereAnother(); //  Check for same alphabet in other positions
         }
-
     }
-    void checkHasWon(){
+
+    void isThereAnother()
+    {
+        searchResultPos = guessAnswer.find_first_of(userAnswer);
+        if (searchResultPos != -1)
+        {
+            //  Guessed correctly
+            asteriskClue.replace(searchResultPos, 1, userAnswer);
+            guessAnswer.replace(searchResultPos, 1, "*");
+            isThereAnother(); //  Recursion for same alphabets in muliple positions
+        }
+        else
+            return;
+    }
+
+    void checkHasWon()
+    {
         int pos = asteriskClue.find_first_of("*");
-        if (pos == -1){
+        if (pos == -1)
+        {
             //  No asterisk remaining
             outOfLoop = true;
             hasWon = true;
         }
     }
-    void displayPreviousGuess(){
+    void displayPreviousGuess()
+    {
         int len = guessIndex;
-        for (int i=0; i<guessIndex; i++){
+        for (int i = 0; i < guessIndex; i++)
+        {
             cout << guessList[i] << ", ";
         }
     }
 
-    void checkGameOver(){
-        if (position == 7){
+    void checkGameOver()
+    {
+        if (position == 7)
+        {
             //  Game Over or Hanged
-            cout << "Game Over"<<endl;
+            cout << "Game Over" << endl;
             outOfLoop = true;
         }
     }
+
     // Constructor
     Hangman(int hangmanLevel, string answer)
     {
@@ -144,22 +169,32 @@ public:
 
 int main()
 {
-    string answer = "tokha";
+    // Manually added answer
+    string answer = "antarctica";
+
     Hangman h = Hangman(1, answer);
+
     //  Make asterisk Clue
     h.makeAsteriskClue();
-    while (1){
+
+    while (1)
+    {
         h.drawHangMan(h.position);
         h.showClue();
         h.askToGuess();
         h.checkGuess();
         h.checkHasWon();
         h.checkGameOver();
-        if (h.outOfLoop == true)    break;
+        if (h.outOfLoop == true)
+            break;
     }
-    if (h.hasWon)   cout << "\n\n Yay!! You were saved."<<endl;
-    else    {
-        cout << "\n\nOops!!You got hanged."<< endl;
+    if (h.hasWon)
+        cout << "\n\n Yay!! You were saved." << endl;
+    else
+    {
+        cout << "\n\nOops!!You got hanged." << endl;
         h.drawHangMan(7);
-    }return 0;
+    }
+
+    return 0;
 }
