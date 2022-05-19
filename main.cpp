@@ -5,11 +5,12 @@ using namespace std;
 class Hangman
 {
 public:
+    string guessList[20];
     int searchResultPos;
     int position;
     string guessAnswer;
+    int guessIndex = 0;
     string userAnswer;
-    string alreadyGuessed[26];
     string asteriskClue;
     bool hasWon = false;
     bool outOfLoop = false;
@@ -81,14 +82,18 @@ public:
 
     void showClue()
     {
-        cout << "\n" << asteriskClue << endl;
+        cout << "\n" << asteriskClue <<"\n"<<"Guessed: ";
+        displayPreviousGuess();
     }
 
     void askToGuess()
     {
         cout << "\nGuess alphabet : ";
         cin >> userAnswer;
-        userAnswer = userAnswer[0]; // Taking only first letter
+        // Taking only first letter
+        userAnswer = userAnswer[0];  
+        guessList[guessIndex] = userAnswer;
+        guessIndex += 1;
     }
 
     //  Check mechanism
@@ -105,6 +110,7 @@ public:
             //  Guessed correctly
             asteriskClue.replace(searchResultPos, 1, string(userAnswer));
         }
+
     }
     void checkHasWon(){
         int pos = asteriskClue.find_first_of("*");
@@ -114,7 +120,12 @@ public:
             hasWon = true;
         }
     }
-
+    void displayPreviousGuess(){
+        int len = guessIndex;
+        for (int i=0; i<guessIndex; i++){
+            cout << guessList[i] << ", ";
+        }
+    }
 
     void checkGameOver(){
         if (position == 7){
@@ -133,7 +144,7 @@ public:
 
 int main()
 {
-    string answer = "monkey";
+    string answer = "tokha";
     Hangman h = Hangman(1, answer);
     //  Make asterisk Clue
     h.makeAsteriskClue();
